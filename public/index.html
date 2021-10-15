@@ -44,11 +44,19 @@
                       <i class="bi bi-google"></i>
                       Login With Google</button> <span class="font-weight-bolder text-success" id="loginWithGoogleRes"></span>
                     <hr />
-                    <h1>Write Firestore</h1>
-                    <input type="text" class="form-control" placeholder="Type here...." id="inpUpdatePost">
+                    <h1>Update Firestore</h1>
+                    <input type="text" class="form-control" placeholder="Update Post" id="inpUpdatePost">
+                    <hr />
+                    <h1>Add Firestore</h1>
+                    <form action="" onsubmit="event.preventDefault(); onAddPost(this)">
+                        <div class="form-row">
+                            <div class="col-md-9 col-sm-12"><input type="text" class="form-control" placeholder="Add Post" name="inp" required minlength="2"></div>
+                            <div class="col-md-3 col-sm-12"><button class="btn btn-primary btn-block mt-md-0 mt-2">Send</button> </div>
+                        </div>
+                    </form>
                 </div>
 
-                <div class="col-md-6 col-12 ">
+                <div class="col-md-6 col-12 mt-md-3">
                     <h1>Get Firestore</h1>
                     <div class="row ">
                         <div class="col-md-6 col-12 ">
@@ -64,6 +72,14 @@
                             <div id="firestoreRealtimeRes">Loading...</div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <h1>All Firestore</h1>
+                    <div id="firestoreAll">Loading...</div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <h1>Remove Firestore</h1>
+                    <div id="firestoreRemove">Loading...</div>
                 </div>
 
             </div>
