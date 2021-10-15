@@ -1,11 +1,63 @@
 document.addEventListener("DOMContentLoaded", event => {
+
     const app = firebase.app();
-    console.log(app);
+
+    document.querySelector("#inpUpdatePost").addEventListener("input", _.debounce(onUpdatePost, 200));
+
+    firestoreNormal();
+    firestoreRealtime();
+
+
 });
+
+function getDoc(collection = "posts", doc = "mypost") {
+    const db = firebase.firestore();
+    const res = db.collection(collection).doc(doc);
+    return res;
+}
+
+async function onUpdatePost(ev) {
+    const value = ev.target.value;
+    const myPost = getDoc();
+    try {
+        const doc = await myPost.update({ title: value });
+        console.log("Doc updated");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function firestoreNormal() {
+    const myPost = getDoc();
+
+    // NORMAL
+    myPost.get()
+        .then(doc => {
+
+            const data = doc.data();
+            normal = document.querySelector("#firestoreNormalRes") || {};
+            normal.innerHTML = `<pre class="small text-success">${JSON.stringify(data, null, 2)}</pre>`;
+            (document.querySelector("#inpUpdatePost") || {}).value = data.title;
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+}
+
+function firestoreRealtime() {
+    const myPost = getDoc();
+
+    // Realtime
+    myPost.onSnapshot(doc => {
+        const data = doc.data();
+        (document.querySelector("#firestoreRealtimeRes") || {}).innerHTML = `<pre class="small text-info">${JSON.stringify(data, null, 2)}</pre>`;
+    });
+}
+
 
 let loginWithGoogleLoading = false;
 // GLOBAL
-
 
 
 
