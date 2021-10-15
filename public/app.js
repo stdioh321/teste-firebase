@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
     const app = firebase.app();
 
-    document.querySelector("#inpUpdatePost").addEventListener("input", _.debounce(onUpdatePost, 300));
+    document.querySelector("#inpUpdatePost").addEventListener("input", _.debounce(onUpdatePost, 800));
 
     firestoreNormal();
     firestoreRealtime();
@@ -23,6 +23,8 @@ function onDeleteDoc(id) {
     getDoc("posts", id).delete();
 }
 async function onUpdatePost(ev) {
+    console.log("%conUpdatePost", "color:red;font-size:2em;");
+
     const value = ev.target.value;
     const myPost = getDoc();
     try {
@@ -55,14 +57,16 @@ function firestoreAll() {
     const all = document.querySelector("#firestoreAll");
     const db = firebase.firestore();
     const docs = db.collection("posts");
-    docs.onSnapshot(querySnapshot => {
-        all.innerHTML = "";
-        querySnapshot.docs.forEach(it => {
+    docs
+        .orderBy("title", "desc")
+        .onSnapshot(querySnapshot => {
+            all.innerHTML = "";
+            querySnapshot.docs.forEach(it => {
 
-            const json = JSON.stringify(it.data(), null, 2);
-            all.innerHTML += `<pre class="text-warning small">id: ${it.id} - ${json}</pre>`
-        })
-    });
+                const json = JSON.stringify(it.data(), null, 2);
+                all.innerHTML += `<pre class="text-warning small">id: ${it.id} - ${json}</pre>`
+            })
+        });
 
     // docs.get()
     //     .then(querySnapshot => {
