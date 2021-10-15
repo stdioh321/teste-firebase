@@ -3,10 +3,14 @@ document.addEventListener("DOMContentLoaded", event => {
     console.log(app);
 });
 
-let loginWithGoogle = false;
+let loginWithGoogleLoading = false;
 // GLOBAL
+
+
+
+
 async function loginWithGoogle(self) {
-    if (loginWithGoogle) return;
+    if (loginWithGoogleLoading) return;
     loginWithGoogle = true;
     self.disabled = true;
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -23,5 +27,5 @@ async function loginWithGoogle(self) {
         console.log(error);
     }
     self.disabled = false;
-    loginWithGoogle = false;
+    loginWithGoogleLoading = false;
 }
