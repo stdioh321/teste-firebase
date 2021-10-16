@@ -23,9 +23,13 @@ yarn --cwd public --modules-folder libs install
 ```sh
 firebase serve
 ```
-|Index|
-|:---|
-|![Index](./docs/screenshot_01.png)|
+It will try to start the server at:
+
+## **http://localhost:5000**
+
+Terminal|Index|
+---|---
+<img width="400">![Terminal](./docs/screenshot_02.png)|![Index](./docs/screenshot_01.png)
 
 
 # References
