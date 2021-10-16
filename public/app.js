@@ -9,12 +9,37 @@ document.addEventListener("DOMContentLoaded", event => {
     firestoreAll();
     firestoreAllRemove();
 
+    firebase.storage().ref("/images/temp.png").getDownloadURL()
+        .then(url => {
+            document.querySelector("#storageResult").innerHTML = `<div class="text-primary">Already on Storage</div><img src="${url}" class="img-fluid"/>`;
+        });
 });
+
+
 
 function getDoc(collection = "posts", doc = "mypost") {
     const db = firebase.firestore();
     const res = db.collection(collection).doc(doc);
     return res;
+}
+
+async function uploadFile(files) {
+    const f = files[0];
+    if (!f) return;
+    const storageResult = document.querySelector("#storageResult");
+    storageResult.innerHTML = "Loading....";
+    const storageRef = firebase.storage().ref("/images");
+    const tempRef = storageRef.child("temp.png");
+    try {
+        snap = await tempRef.put(f);
+        const urlImage = await tempRef.getDownloadURL();
+        storageResult.innerHTML = `<img src="${urlImage}" class="img-fluid"/>`
+    } catch (error) {
+        console.log({ error });
+        storageResult.innerHTML = "<div class='alert alert-danger'> </div>";
+    }
+
+
 }
 
 function onDeleteDoc(id) {
@@ -63,8 +88,8 @@ function firestoreAll() {
             all.innerHTML = "";
             querySnapshot.docs.forEach(it => {
 
-                const json = JSON.stringify(it.data(), null, 2);
-                all.innerHTML += `<pre class="text-warning small">id: ${it.id} - ${json}</pre>`
+                const json = JSON.stringify(it.data());
+                all.innerHTML += `<div class="alert alert-warning small"><span class="font-weight-bold">ID:</span> ${it.id} - ${json}</div>`
             })
         });
 
