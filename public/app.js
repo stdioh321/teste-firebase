@@ -83,15 +83,33 @@ function loadThingsList() {
             }
 
 
-            elThingsList.querySelector("ul").innerHTML += `<li class="list-group-item">
-            <div>${data.name}</div>
-            <div class="text-muted small">${tempDate || ""}</div>
-            <div class="text-muted small">${data?.user?.name || ""}</div>
+            elThingsList.querySelector("ul").innerHTML += `<li class="list-group-item d-flex">
+            <div class="flex-fill">
+                <div>${data.name}</div>
+                <div class="text-muted small">${tempDate || ""}</div>
+                <div class="text-muted small">${data?.user?.name || ""}</div>
+            </div>
+            <button class="btn btn-danger align-self-start" onclick="onRemoveThing('${doc.id}')" >X</button>
             </li>`
         })
     });
 }
-
+async function onRemoveThing(docId) {
+    let ok = confirm("Realy remove it?");
+    if (!ok) return;
+    try {
+        let tempThing = await firebase.firestore().collection(collThings).doc(docId).delete();
+        Toastify({
+            text: "item Removed",
+            style: {
+                background: "#c82333",
+            },
+            close: true,
+        }).showToast()
+    } catch (error) {
+        console.log({ error });
+    }
+}
 async function addThing(bt) {
     bt.disabled = true;
     const db = firebase.firestore();
