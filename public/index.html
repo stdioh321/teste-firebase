@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Welcome to Firebase Hosting</title>
 
     <!-- update the version number as needed -->
@@ -25,78 +25,107 @@
     -->
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
 
-
     <!-- CUSTOM -->
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="/libs/faker/dist/faker.min.js"></script>
 
-    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="libs/bootstrap-icons/font/bootstrap-icons.css">
-
-
+    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="libs/bootstrap-icons/font/bootstrap-icons.css" />
 </head>
 
 <body>
     <div id="app">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6 col-12">
+                <div class="col-md-4 col-12">
                     <h1>Login With Google</h1>
 
                     <button class="btn btn-primary" onclick="loginWithGoogle(this)">
-                      <i class="bi bi-google"></i>
-                      Login With Google</button> <span class="font-weight-bolder text-success" id="loginWithGoogleRes"></span>
+              <i class="bi bi-google"></i>
+              Login With Google
+            </button>
+                    <span class="font-weight-bolder text-success" id="loginWithGoogleRes"></span>
                     <hr />
                     <h1>Update Firestore</h1>
-                    <input type="text" class="form-control" placeholder="Update Post" id="inpUpdatePost">
+                    <input type="text" class="form-control" placeholder="Update Post" id="inpUpdatePost" />
                     <hr />
                     <h1>Add Firestore</h1>
                     <form action="" onsubmit="event.preventDefault(); onAddPost(this)">
                         <div class="form-row">
-                            <div class="col-md-9 col-sm-12"><input type="text" class="form-control" placeholder="Add Post" name="inp" required minlength="2"></div>
-                            <div class="col-md-3 col-sm-12"><button class="btn btn-primary btn-block mt-md-0 mt-2">Send</button> </div>
+                            <div class="col-md-9 col-sm-12">
+                                <input type="text" class="form-control" placeholder="Add Post" name="inp" required minlength="2" />
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <button class="btn btn-primary btn-block mt-md-0 mt-2">
+                    Send
+                  </button>
+                            </div>
                         </div>
                     </form>
                 </div>
 
-                <div class="col-md-6 col-12 mt-md-3">
+                <div class="col-md-4 col-12">
                     <h1>Get Firestore</h1>
-                    <div class="row ">
-                        <div class="col-md-6 col-12 ">
+                    <div class="row">
+                        <div class="col-md-6 col-12">
                             <h2>Normal</h2>
                             <div id="firestoreNormalRes">Loading...</div>
                         </div>
-                        <div class="col-md-6 col-12 ">
-                            <div class="d-flex ">
+                        <div class="col-md-6 col-12">
+                            <div class="d-flex">
                                 <h2>Realtime</h2>
-                                <small class="ml-2 d-inline small text-danger ">Change the value at the firebase</small>
-                            </div>
-
-                            <div id="firestoreRealtimeRes">Loading...</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-12">
-                    <h1>All Firestore</h1>
-                    <div id="firestoreAll">Loading...</div>
-                </div>
-                <div class="col-md-6 col-12">
-                    <h1>Remove Firestore</h1>
-                    <div id="firestoreRemove">Loading...</div>
+                                <small class="ml-2 d-inline small text-danger">Change the value at the firebase</small
+                  >
                 </div>
 
+                <div id="firestoreRealtimeRes">Loading...</div>
+              </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h1>Storage</h1>
-                    <label for="inputStorage">Only Images</label>
-                    <input type="file" id="inputStorage" class="form-control" accept="image/*" onchange="uploadFile(this)">
-                    <div class="mt-3" id="storageResult"></div>
+          </div>
+          <div class="col-md-4 col-12">
+            <h1>All Firestore</h1>
+            <div id="firestoreAll">Loading...</div>
+          </div>
+          <div class="col-md-4 col-12">
+            <h1>Remove Firestore</h1>
+            <div id="firestoreRemove">Loading...</div>
+          </div>
+
+          <div class="col-md-4">
+            <h1>Storage</h1>
+            <label for="inputStorage">Only Images</label>
+            <input
+              type="file"
+              id="inputStorage"
+              class="form-control"
+              accept="image/*"
+              onchange="uploadFile(this)"
+            />
+            <div class="mt-3" id="storageResult"></div>
+          </div>          
+          <div class="col-md-4">
+              <h1>Random Things</h1>
+              <div>
+                  <div class="d-flex">
+                    
+                      <div class="randomAuth flex-fill">
+                        <button class="btn btn-primary login" onclick="thingsLogin(this)" hidden><i class="bi bi-google mr-2"></i>Login</button>
+                        <button class="btn btn-danger logoff" onclick="thingsLogoff(this)" hidden><i class="bi bi-google mr-2"></i>Logoff</button>
+                      </div>
+                      <button class="btn btn-success ml-auto thingsAddButton" hidden onclick="addThing(this)">Add</button>
+                  </div>
+                  <div class="text-info" id="username"></div>
                 </div>
-            </div>
+              <div class="mt-md-2" id="thingsList">
+                  <ul class="list-group">
+                      <li class="list-group-item">Loading....</li>
+                  </ul>
+              </div>
+          </div>
         </div>
+        
+      </div>
     </div>
-    <script defer src="./app.js "></script>
-
-</body>
-
+    <script defer src="./app.js" ></script>
+  </body>
 </html>

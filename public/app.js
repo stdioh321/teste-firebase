@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", event => {
     firestoreRealtime();
     firestoreAll();
     firestoreAllRemove();
-
+    loadThingsList();
     const storageImageRef = firebase.storage().ref("/public/images/temp.png");
     storageImageRef.getDownloadURL()
         .then(url => {
@@ -18,6 +18,101 @@ document.addEventListener("DOMContentLoaded", event => {
         })
 });
 
+
+// BEGIN Things 
+let collThings = "things";
+let elThingsList = document.querySelector("#thingsList");
+let elBtLogin = document.querySelector(".randomAuth .login");
+let elBtLogoff = document.querySelector(".randomAuth .logoff");
+let gUser = null;
+
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        gUser = user;
+        elBtLogin.hidden = true;
+        elBtLogoff.hidden = false;
+        document.querySelector("#username").innerHTML = `<span class="my-2 font-weight-bolder" style="font-size: 1.5em">${user.displayName}</span>`;
+
+    } else {
+        gUser = null;
+        elBtLogin.hidden = false;
+        elBtLogoff.hidden = true;
+        document.querySelector("#username").innerHTML = ``;
+    }
+});
+async function thingsLogin(bt) {
+    bt.disabled = true;
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const auth = firebase.auth();
+
+    try {
+        const res = await auth.signInWithPopup(provider);
+
+    } catch (error) {
+        console.log({ error });
+    }
+    bt.disabled = false;
+}
+async function thingsLogoff(bt) {
+    bt.disabled = true;
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const auth = firebase.auth();
+
+    try {
+        const res = await auth.signOut();
+
+    } catch (error) {
+        console.log({ error });
+    }
+    bt.disabled = false;
+}
+
+function loadThingsList() {
+    const db = firebase.firestore();
+    const thingsListRef = db.collection(collThings);
+    thingsListRef.onSnapshot(snap => {
+        document.querySelector(".thingsAddButton").hidden = false;
+        elThingsList.querySelector("ul").innerHTML = "";
+        if (snap.docs.length < 1) elThingsList.querySelector("ul").innerHTML += `<li class="list-group-item">Empty</li>`
+        snap.docs.forEach(doc => {
+            let data = doc.data();
+            let tempDate = null;
+            if (data.date) {
+                tempDate = new Date(data.date.toDate());
+                tempDate = `${tempDate.getFullYear()}-${tempDate.getMonth()+1}-${tempDate.getDay()} ${tempDate.getHours()}:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
+            }
+
+
+            elThingsList.querySelector("ul").innerHTML += `<li class="list-group-item">
+            <div>${data.name}</div>
+            <div class="text-muted small">${tempDate || ""}</div>
+            <div class="text-muted small">${data?.user?.name || ""}</div>
+            </li>`
+        })
+    });
+}
+
+async function addThing(bt) {
+    bt.disabled = true;
+    const db = firebase.firestore();
+    try {
+
+        let thing = {
+            name: faker.commerce.productName(),
+            date: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (gUser) thing["user"] = { uid: gUser.uid, name: gUser.displayName };
+        const addedDoc = await db.collection(collThings).add(thing);
+        const data = (await addedDoc.get()).data();
+
+        console.log({ data });
+    } catch (error) {
+        console.log({ error });
+    }
+
+    bt.disabled = false;
+}
+// END Things 
 
 
 function getDoc(collection = "posts", doc = "mypost") {
