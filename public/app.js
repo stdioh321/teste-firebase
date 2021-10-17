@@ -9,10 +9,13 @@ document.addEventListener("DOMContentLoaded", event => {
     firestoreAll();
     firestoreAllRemove();
 
-    firebase.storage().ref("/images/temp.png").getDownloadURL()
+    const storageImageRef = firebase.storage().ref("/public/images/temp.png");
+    storageImageRef.getDownloadURL()
         .then(url => {
             document.querySelector("#storageResult").innerHTML = `<div class="text-primary">Already on Storage</div><img src="${url}" class="img-fluid"/>`;
-        });
+        }, error => {
+            console.log({ error });
+        })
 });
 
 
@@ -23,12 +26,15 @@ function getDoc(collection = "posts", doc = "mypost") {
     return res;
 }
 
-async function uploadFile(files) {
-    const f = files[0];
+async function uploadFile(inputFile) {
+    const f = inputFile.files.item(0);
     if (!f) return;
+    const { type, name } = f;
+    console.log({ name, type });
+    inputFile.value = "";
     const storageResult = document.querySelector("#storageResult");
     storageResult.innerHTML = "Loading....";
-    const storageRef = firebase.storage().ref("/images");
+    const storageRef = firebase.storage().ref("/public/images");
     const tempRef = storageRef.child("temp.png");
     try {
         snap = await tempRef.put(f);
@@ -36,7 +42,7 @@ async function uploadFile(files) {
         storageResult.innerHTML = `<img src="${urlImage}" class="img-fluid"/>`
     } catch (error) {
         console.log({ error });
-        storageResult.innerHTML = "<div class='alert alert-danger'> </div>";
+        storageResult.innerHTML = `<div class='alert alert-danger'>${error.message || "Error"}</div>`;
     }
 
 

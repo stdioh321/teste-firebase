@@ -33,7 +33,8 @@ Terminal|Index|
 
 
 # References
-# === [Tutorial Fireship](https://www.youtube.com/watch?v=9kRgVxULbag) ===
+# === [Tutorial Fireship 01](https://www.youtube.com/watch?v=9kRgVxULbag) ===
+# === [Tutorial Fireship 02](https://www.youtube.com/watch?v=q5J5ho7YUhA) ===
 
 
 * [Firebase](https://firebase.google.com/?hl=pt)
